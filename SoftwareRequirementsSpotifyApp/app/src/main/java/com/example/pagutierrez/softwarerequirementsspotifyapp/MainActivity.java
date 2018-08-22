@@ -1,8 +1,8 @@
 package com.example.pagutierrez.softwarerequirementsspotifyapp;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -79,12 +79,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPlaybackError(Error error) {
-        Log.d("MainActivity", "Playback error received: " + error.name());
-        switch (error) {
-            // Handle error type as necessary
-            default:
-                break;
-        }
+
     }
 
     @Override
@@ -100,8 +95,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoginFailed(Error var1) {
-        Log.d("MainActivity", "Login failed");
+    public void onLoginFailed(Error error) {
+        Log.d("MainActivity", "Playback error received: " + error.name());
+        switch (error) {
+            // Handle error type as necessary
+            default:
+                break;
+        }
     }
 
     @Override
