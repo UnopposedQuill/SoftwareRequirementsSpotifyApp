@@ -23,43 +23,13 @@
         android:onClick="onLoginButtonClicked"
         android:text="Iniciar Sesion"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/play_track_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onPlayButtonClicked"
-            android:text="Cancion"/>
-
-        <Button
-            android:id="@+id/play_album_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onPlayButtonClicked"
-            android:text="@string/play_album_button_label"/>
-
-        <Button
-            android:id="@+id/play_playlist_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onPlayButtonClicked"
-            android:text="@string/play_playlist_button_label"/>
-
-    </LinearLayout>
-
     <Button
-        android:id="@+id/pause_button"
+        android:id="@+id/play_playlist_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onPauseButtonClicked"
-        android:text="Pausar/Resumir"/>
+        android:layout_weight="1"
+        android:onClick="onPlayButtonClicked"
+        android:text="@string/play_playlist_button_label"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,6 +43,14 @@
             android:layout_weight="1"
             android:onClick="onSkipToPreviousButtonClicked"
             android:text="Anterior"/>
+
+        <Button
+            android:id="@+id/pause_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onPauseButtonClicked"
+            android:text="Pausar/Resumir"/>
 
         <Button
             android:id="@+id/skip_next_button"

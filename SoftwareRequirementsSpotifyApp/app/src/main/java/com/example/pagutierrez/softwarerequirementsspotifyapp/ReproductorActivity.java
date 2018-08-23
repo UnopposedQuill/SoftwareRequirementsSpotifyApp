@@ -23,8 +23,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,11 +31,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -47,41 +42,28 @@ import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Connectivity;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Metadata;
-import com.spotify.sdk.android.player.PlaybackBitrate;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 public class ReproductorActivity extends Activity implements
         Player.NotificationCallback, ConnectionStateCallback {
-    //   ____                _              _
-    //  / ___|___  _ __  ___| |_ __ _ _ __ | |_ ___
-    // | |   / _ \| '_ \/ __| __/ _` | '_ \| __/ __|
-    // | |__| (_) | | | \__ \ || (_| | | | | |_\__ \
-    //  \____\___/|_| |_|___/\__\__,_|_| |_|\__|___/
-    //
+
+    //------------------------------------------------------------------------------------------------------
+    //Constantes de control
+    //------------------------------------------------------------------------------------------------------
 
     @SuppressWarnings("SpellCheckingInspection")
-    private static final String CLIENT_ID = "003b67e736994cc5921815eff06d7861";
+    private static final String CLIENT_ID = "e12d21834aac4d3e9c73fa7cc158dc53";
+    //private static final String CLIENT_ID = "003b67e736994cc5921815eff06d7861";
     @SuppressWarnings("SpellCheckingInspection")
-    private static final String REDIRECT_URI = "spotyreque://callback";
+    private static final String REDIRECT_URI = "softwarerequirementsspotifyapp://callback";
+    //private static final String REDIRECT_URI = "spotyreque://callback";
 
     @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_SONG_URI = "spotify:track:5ooGzF6BySuYskuhm1DoOO";
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_SONG_MONO_URI = "spotify:track:1FqY3uJypma5wkYw66QOUi";
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_SONG_48kHz_URI = "spotify:track:3wxTNS3aqb9RbBLZgJdZgH";
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_PLAYLIST_URI = "spotify:playlist:4asfPVkkHuGk7IEDQpAmSc";
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_ALBUM_URI = "spotify:album:60xMOzdPAgUpWYlnd8wmVI";
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String TEST_QUEUE_SONG_URI = "spotify:track:5EEOjaJyWvfMglmEwf9bG3";
+    private static final String TEST_PLAYLIST_URI = "spotify:playlist:0lO53cpmJj5oGv8pcLZYMj";
 
     /**
      * Request code that will be passed together with authentication result to the onAuthenticationResult
@@ -93,10 +75,7 @@ public class ReproductorActivity extends Activity implements
      * (or effectively, after the user has logged in).
      */
     private static final int[] REQUIRES_INITIALIZED_STATE = {
-            R.id.play_track_button,
-            R.id.play_album_button,
-            R.id.play_playlist_button,
-            R.id.pause_button,
+            R.id.play_playlist_button
     };
 
     /**
@@ -105,15 +84,13 @@ public class ReproductorActivity extends Activity implements
     private static final int[] REQUIRES_PLAYING_STATE = {
             R.id.skip_next_button,
             R.id.skip_prev_button,
+            R.id.pause_button
     };
-    public static final String TAG = "SpotifySdkDemo";
+    public static final String TAG = "SRSpotifyApp";
 
-    //  _____ _      _     _
-    // |  ___(_) ___| | __| |___
-    // | |_  | |/ _ \ |/ _` / __|
-    // |  _| | |  __/ | (_| \__ \
-    // |_|   |_|\___|_|\__,_|___/
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Variables
+    //------------------------------------------------------------------------------------------------------
 
     /**
      * The player used by this activity. There is only ever one instance of the player,
@@ -140,13 +117,11 @@ public class ReproductorActivity extends Activity implements
     private BroadcastReceiver mNetworkStateReceiver;
 
     /**
-     * Used to log messages to a {@link android.widget.TextView} in this activity.
+     * Used to log messages to a Text View in this activity.
      */
     private TextView mStatusText;
 
     private TextView mMetadataText;
-
-    private EditText mSeekEditText;
 
     /**
      * Used to scroll the {@link #mStatusText} to the bottom after updating text.
@@ -166,12 +141,9 @@ public class ReproductorActivity extends Activity implements
         }
     };
 
-    //  ___       _ _   _       _ _          _   _
-    // |_ _|_ __ (_) |_(_) __ _| (_)______ _| |_(_) ___  _ __
-    //  | || '_ \| | __| |/ _` | | |_  / _` | __| |/ _ \| '_ \
-    //  | || | | | | |_| | (_| | | |/ / (_| | |_| | (_) | | | |
-    // |___|_| |_|_|\__|_|\__,_|_|_/___\__,_|\__|_|\___/|_| |_|
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Inicialización
+    //------------------------------------------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,12 +204,9 @@ public class ReproductorActivity extends Activity implements
         }
     }
 
-    //     _         _   _                _   _           _   _
-    //    / \  _   _| |_| |__   ___ _ __ | |_(_) ___ __ _| |_(_) ___  _ __
-    //   / _ \| | | | __| '_ \ / _ \ '_ \| __| |/ __/ _` | __| |/ _ \| '_ \
-    //  / ___ \ |_| | |_| | | |  __/ | | | |_| | (_| (_| | |_| | (_) | | | |
-    // /_/   \_\__,_|\__|_| |_|\___|_| |_|\__|_|\___\__,_|\__|_|\___/|_| |_|
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Autenticación
+    //------------------------------------------------------------------------------------------------------
 
     private void openLoginWindow() {
         final AuthenticationRequest request = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI)
@@ -303,12 +272,9 @@ public class ReproductorActivity extends Activity implements
         }
     }
 
-    //  _   _ ___   _____                 _
-    // | | | |_ _| | ____|_   _____ _ __ | |_ ___
-    // | | | || |  |  _| \ \ / / _ \ '_ \| __/ __|
-    // | |_| || |  | |___ \ V /  __/ | | | |_\__ \
-    //  \___/|___| |_____| \_/ \___|_| |_|\__|___/
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Eventos de la interfaz
+    //------------------------------------------------------------------------------------------------------
 
     private void updateView() {
         boolean loggedIn = isLoggedIn();
@@ -334,35 +300,12 @@ public class ReproductorActivity extends Activity implements
             findViewById(R.id.pause_button).setEnabled(mMetadata.currentTrack != null);
         }
 
-        final ImageView coverArtView = (ImageView) findViewById(R.id.cover_art);
         if (mMetadata != null && mMetadata.currentTrack != null) {
             final String durationStr = String.format(" (%dms)", mMetadata.currentTrack.durationMs);
             mMetadataText.setText(mMetadata.contextName + "\n" + mMetadata.currentTrack.name + " - " + mMetadata.currentTrack.artistName);
-
-            Picasso.with(this)
-                    .load(mMetadata.currentTrack.albumCoverWebUrl)
-                    .transform(new Transformation() {
-                        @Override
-                        public Bitmap transform(Bitmap source) {
-                            // really ugly darkening trick
-                            final Bitmap copy = source.copy(source.getConfig(), true);
-                            source.recycle();
-                            final Canvas canvas = new Canvas(copy);
-                            canvas.drawColor(0xbb000000);
-                            return copy;
-                        }
-
-                        @Override
-                        public String key() {
-                            return "darken";
-                        }
-                    })
-                    .into(coverArtView);
         } else {
-            mMetadataText.setText("<nada se esta reproduciendo>");
-            coverArtView.setBackground(null);
+            mMetadataText.setText("<Nada se esta reproduciendo>");
         }
-
     }
 
     private boolean isLoggedIn() {
@@ -380,23 +323,8 @@ public class ReproductorActivity extends Activity implements
 
     public void onPlayButtonClicked(View view) {
 
-        String uri;
-        switch (view.getId()) {
-            case R.id.play_track_button:
-                uri = TEST_SONG_URI;
-                break;
-            case R.id.play_playlist_button:
-                uri = TEST_PLAYLIST_URI;
-                break;
-            case R.id.play_album_button:
-                uri = TEST_ALBUM_URI;
-                break;
-            default:
-                throw new IllegalArgumentException("View ID does not have an associated URI to play");
-        }
-
-        logStatus("Starting playback for " + uri);
-        mPlayer.playUri(mOperationCallback, uri, 0, 0);
+        logStatus("Starting playback for " + TEST_PLAYLIST_URI);
+        mPlayer.playUri(mOperationCallback, TEST_PLAYLIST_URI, 0, 0);
     }
 
     public void onPauseButtonClicked(View view) {
@@ -415,29 +343,10 @@ public class ReproductorActivity extends Activity implements
         mPlayer.skipToNext(mOperationCallback);
     }
 
-    public void onSeekButtonClicked(View view) {
-        final Integer seek = Integer.valueOf(mSeekEditText.getText().toString());
-        mPlayer.seekToPosition(mOperationCallback, seek);
-    }
 
-    public void onLowBitrateButtonPressed(View view) {
-        mPlayer.setPlaybackBitrate(mOperationCallback, PlaybackBitrate.BITRATE_LOW);
-    }
-
-    public void onNormalBitrateButtonPressed(View view) {
-        mPlayer.setPlaybackBitrate(mOperationCallback, PlaybackBitrate.BITRATE_NORMAL);
-    }
-
-    public void onHighBitrateButtonPressed(View view) {
-        mPlayer.setPlaybackBitrate(mOperationCallback, PlaybackBitrate.BITRATE_HIGH);
-    }
-
-    //   ____      _ _ _                _      __  __      _   _               _
-    //  / ___|__ _| | | |__   __ _  ___| | __ |  \/  | ___| |_| |__   ___   __| |___
-    // | |   / _` | | | '_ \ / _` |/ __| |/ / | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|
-    // | |__| (_| | | | |_) | (_| | (__|   <  | |  | |  __/ |_| | | | (_) | (_| \__ \
-    //  \____\__,_|_|_|_.__/ \__,_|\___|_|\_\ |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Métodos de callback
+    //------------------------------------------------------------------------------------------------------
 
     @Override
     public void onLoggedIn() {
@@ -465,12 +374,9 @@ public class ReproductorActivity extends Activity implements
         logStatus("Incoming connection message: " + message);
     }
 
-    //  _____                       _   _                 _ _ _
-    // | ____|_ __ _ __ ___  _ __  | | | | __ _ _ __   __| | (_)_ __   __ _
-    // |  _| | '__| '__/ _ \| '__| | |_| |/ _` | '_ \ / _` | | | '_ \ / _` |
-    // | |___| |  | | | (_) | |    |  _  | (_| | | | | (_| | | | | | | (_| |
-    // |_____|_|  |_|  \___/|_|    |_| |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
-    //                                                                 |___/
+    //------------------------------------------------------------------------------------------------------
+    //Manejo de Errores
+    //------------------------------------------------------------------------------------------------------
 
     /**
      * Print a status message from a callback (or some other place) to the TextView in this
@@ -493,12 +399,9 @@ public class ReproductorActivity extends Activity implements
         });
     }
 
-    //  ____            _                   _   _
-    // |  _ \  ___  ___| |_ _ __ _   _  ___| |_(_) ___  _ __
-    // | | | |/ _ \/ __| __| '__| | | |/ __| __| |/ _ \| '_ \
-    // | |_| |  __/\__ \ |_| |  | |_| | (__| |_| | (_) | | | |
-    // |____/ \___||___/\__|_|   \__,_|\___|\__|_|\___/|_| |_|
-    //
+    //------------------------------------------------------------------------------------------------------
+    //Destrucción
+    //------------------------------------------------------------------------------------------------------
 
     @Override
     protected void onPause() {
